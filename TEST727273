@@ -34,7 +34,7 @@ local boostsList = {
 }
 
 local function eatAllBoosts()
-    local player = LocalPlayer
+    local player = game.Players.LocalPlayer
     local backpack = player:WaitForChild("Backpack")
     local character = player.Character or player.CharacterAdded:Wait()
 
