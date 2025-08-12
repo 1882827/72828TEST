@@ -181,10 +181,11 @@ tabteleport:AddButton("Safe Spot", function()
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    local camera = game.Workspace.CurrentCamera
 
     local posX, posY, posZ = 100000, -200, 100000
 
-    -- Criar plataforma primeiro
+    -- Criar plataforma
     local platform = Instance.new("Part")
     platform.Size = Vector3.new(50, 1, 50)
     platform.Position = Vector3.new(posX, posY - 3, posZ)
@@ -194,16 +195,41 @@ tabteleport:AddButton("Safe Spot", function()
     platform.Name = "SafePlatform"
     platform.Parent = workspace
 
-    -- Pequena espera para garantir que a física reconheça a plataforma
     task.wait(0.2)
 
-    -- Teleportar jogador
+    -- Teleportar
     humanoidRootPart.CFrame = CFrame.new(posX, posY, posZ)
+
+    -- Ao morrer: invisível + teleportar para longe + travar câmera
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Died:Connect(function()
+        task.wait(0.1)
+
+        -- Tornar invisível
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.Transparency = 1
+                part.CanCollide = false
+            elseif part:IsA("Decal") then
+                part.Transparency = 1
+            end
+        end
+
+        -- Mandar corpo para longe
+        local root = character:FindFirstChild("HumanoidRootPart")
+        if root then
+            root.CFrame = CFrame.new(999999, -500, 999999)
+        end
+
+        -- Travar câmera no Safe Spot
+        camera.CameraType = Enum.CameraType.Scriptable
+        camera.CFrame = CFrame.new(posX, posY + 5, posZ + 10) * CFrame.Angles(0, math.rad(180), 0)
+    end)
 
     -- Notificação
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Teletransporte",
-        Text = "Teleported with Safe Platform",
+        Text = "Safe Spot ativado",
         Duration = 2
     })
 end)
