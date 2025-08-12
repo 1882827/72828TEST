@@ -184,14 +184,18 @@ tabteleport:AddButton("Safe Spot", function()
 
     local posX, posY, posZ = 100000, -200, 100000
 
-    -- Criar plataforma
+    -- Criar plataforma primeiro
     local platform = Instance.new("Part")
-    platform.Size = Vector3.new(50, 1, 50) -- tamanho da plataforma
-    platform.Position = Vector3.new(posX, posY - 3, posZ) -- um pouco abaixo do jogador
+    platform.Size = Vector3.new(50, 1, 50)
+    platform.Position = Vector3.new(posX, posY - 3, posZ)
     platform.Anchored = true
-    platform.Color = Color3.fromRGB(255, 0, 0) -- cor vermelha
-    platform.Transparency = 0 -- visível
+    platform.CanCollide = true
+    platform.Color = Color3.fromRGB(255, 0, 0)
+    platform.Name = "SafePlatform"
     platform.Parent = workspace
+
+    -- Pequena espera para garantir que a física reconheça a plataforma
+    task.wait(0.2)
 
     -- Teleportar jogador
     humanoidRootPart.CFrame = CFrame.new(posX, posY, posZ)
