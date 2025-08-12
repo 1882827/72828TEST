@@ -45,7 +45,7 @@ local function eatAllBoosts()
             pcall(function()
                 boost:Activate()
             end)
-            task.wait(0.3)
+            task.wait(0.1)
             boost = backpack:FindFirstChild(boostName)
         end
     end
