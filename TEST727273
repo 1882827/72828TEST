@@ -182,11 +182,24 @@ tabteleport:AddButton("Safe Spot", function()
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-    humanoidRootPart.CFrame = CFrame.new(100000, -200, 100000)
+    local posX, posY, posZ = 100000, -200, 100000
 
+    -- Criar plataforma
+    local platform = Instance.new("Part")
+    platform.Size = Vector3.new(50, 1, 50) -- tamanho da plataforma
+    platform.Position = Vector3.new(posX, posY - 3, posZ) -- um pouco abaixo do jogador
+    platform.Anchored = true
+    platform.Color = Color3.fromRGB(255, 0, 0) -- cor vermelha
+    platform.Transparency = 0 -- visível
+    platform.Parent = workspace
+
+    -- Teleportar jogador
+    humanoidRootPart.CFrame = CFrame.new(posX, posY, posZ)
+
+    -- Notificação
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Teletransporte",
-        Text = "Teleported",
-        Duration = 0
+        Text = "Teleported with Safe Platform",
+        Duration = 2
     })
 end)
